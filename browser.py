@@ -186,8 +186,14 @@ class MainWindow(QtWidgets.QMainWindow):
         if webview:
             webview.page().toHtml(lambda html: self.go_by(html, "next", TEXT_MATCHES_NEXT))
 
-    def go_by(self, html:str, place:str, text_matches:list=[]):
-        """Go to a link based on class, rel, or id."""
+    def go_by(self, html:str, relationship:str, text_matches:list=[]):
+        """
+        From an HTML string, parse out a link based on class, rel, or id.
+        
+        * html - A string that contains HTML data to be parsed.
+        * relationship - The relationship that the link has relative to the current page.
+        * text_matches (optional) - A list of substrings to be checked against in link innerHTML.
+        """
         
         webview = self.tab_widget.currentWidget()
         if not webview:
@@ -200,10 +206,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # The to-be-determined URL.
         url = None
         
-        # Check attributes for the desired place.
+        # Check attributes for the desired relationship.
         for anchor in anchors:
             for attribute in ("class", "rel", "id"):
-                if anchor.has_attr(attribute) and place in anchor[attribute]:
+                if anchor.has_attr(attribute) and relationship in anchor[attribute]:
                     url = anchor["href"]
                     break
             if url:
