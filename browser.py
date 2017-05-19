@@ -125,7 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Update the text in the location bar."""
         
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             url = webview.url().toString()
             self.location_bar.setText(url)
 
@@ -136,11 +136,11 @@ class MainWindow(QtWidgets.QMainWindow):
         for index in range(0, self.tab_widget.count()):
             webview = self.tab_widget.widget(index)
             
-            if not webview:
+            if not isinstance(webview, QtWebEngineWidgets.QWebEngineView):
                 continue
             
-            # Truncate to 40 characters. If the title is an empty string then it's Untitled.
-            title = webview.title()[:40] if len(webview.title()) > 0 else "(Untitled)"
+            # Truncate to 24 characters. If the title is an empty string then it's Untitled.
+            title = webview.title()[:24] if len(webview.title()) > 0 else "(Untitled)"
             self.tab_widget.setTabText(index, title)
             
             # Are we on the current tab? Then set the window title.
@@ -153,7 +153,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Load the URL listed in the location bar."""
         
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             url = QtCore.QUrl.fromUserInput(self.location_bar.text())
             webview.load(url)
 
@@ -161,21 +161,21 @@ class MainWindow(QtWidgets.QMainWindow):
         """Go back in history by one."""
         
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.back()
 
     def forward(self):
         """Go forward in history by one."""
         
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.forward()
 
     def previous(self):
         """Attempt to go to the previous page."""
         
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.page().toHtml(lambda html: self.go_by(html, "prev", TEXT_MATCHES_PREVIOUS))
 
     def next(self):
@@ -183,7 +183,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         webview = self.tab_widget.currentWidget()
         
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.page().toHtml(lambda html: self.go_by(html, "next", TEXT_MATCHES_NEXT))
 
     def go_by(self, html:str, relationship:str, text_matches:list=[]):
@@ -196,7 +196,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         
         webview = self.tab_widget.currentWidget()
-        if not webview:
+        if not isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             return
         
         # Create a BeautifulSoup object.
@@ -238,14 +238,14 @@ class MainWindow(QtWidgets.QMainWindow):
         """Stop the current page load."""
     
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.stop()
 
     def reload(self):
         """Reload the current page."""
     
         webview = self.tab_widget.currentWidget()
-        if webview:
+        if isinstance(webview, QtWebEngineWidgets.QWebEngineView):
             webview.reload()
 
     # Tab actions.
