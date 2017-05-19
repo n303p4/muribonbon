@@ -42,7 +42,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Create toolbar.
         self.toolbar = QtWidgets.QToolBar("Main Toolbar", self)
-        self.toolbar.visibilityChanged.connect(lambda: self.toolbar.setVisible(True))
+        self.toolbar.setMovable(False)
+        self.toolbar.setContextMenuPolicy(Qt.CustomContextMenu)
         self.addToolBar(self.toolbar)
 
         # Create navigation actions.
@@ -120,7 +121,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Start off by making a new tab.
         self.new_tab()
 
-    # Window-related tasks.
+    # Internal stuff. Don't call these, please.
     
     def _update_location_bar(self):
         """Update the text in the location bar."""
