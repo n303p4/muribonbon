@@ -42,6 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Create toolbar.
         self.toolbar = QtWidgets.QToolBar("Main Toolbar", self)
+        self.toolbar.visibilityChanged.connect(lambda: self.toolbar.setVisible(True))
         self.addToolBar(self.toolbar)
 
         # Create navigation actions.
