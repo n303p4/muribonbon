@@ -15,17 +15,16 @@ Requirements:
 This browser calls for system native icons, so it'll only look presentable on Linux.
 """
 
-# Standard library.
 import sys
 import urllib.parse
 
-# Third-party modules.
 from PyQt5 import QtCore, QtGui, QtWidgets, QtWebEngineWidgets
 from PyQt5.QtCore import Qt
 from bs4 import BeautifulSoup # This is more Pythonic than using JavaScript, and sometimes safer.
 import validators
 
-# Constants
+import adblocker
+
 TEXT_MATCHES_NEXT = ["next page", "next", ">", ">>"]
 TEXT_MATCHES_PREVIOUS = ["previous page", "prev", "<", "<<"]
 
@@ -35,6 +34,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
     
         super().__init__(*args, **kwargs)
+        self.adblocker = adblocker.AdBlocker()
         self._setup()
     
     def _setup(self):
@@ -259,6 +259,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         webview.titleChanged.connect(self._update_tab_titles)
         webview.urlChanged.connect(self._update_location_bar)
+        
+        # Assign ad blocker.
+        webview.page().profile().setRequestInterceptor(self.adblocker)
         
         self.tab_widget.addTab(webview, "New Tab")
         self.tab_widget.setCurrentIndex(self.tab_widget.count()-1)
